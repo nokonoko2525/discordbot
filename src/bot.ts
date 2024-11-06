@@ -15,7 +15,7 @@ client.on('messageCreate', (message: Message) => {
 
   // 特定のメッセージに返信
   if (message.content.toLowerCase() === 'こんにちは') {
-    message.reply('こんにちは！');
+    message.react('🤔');
   }
 });
 
