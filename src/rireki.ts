@@ -28,9 +28,9 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 	}
 
 	// Now the message has been cached and is fully available
-	console.log(`${reaction.message.author}'s message "${reaction.message.content}" gained a reaction!`);
+	console.log(`${reaction.message.author?.tag}'s message "${reaction.message.content}" gained a reaction from ${user.tag}!`);
 	// The reaction is now also fully available and the properties will be reflected accurately:
-	console.log(`${reaction.count} user(s) have given the same reaction to this message!`);
+	console.log(`Emoji: ${reaction.emoji.name}, Total Count: ${reaction.count}`);
 });
-
- client.login(process.env.DISCORD_TOKEN);
+ 
+client.login(process.env.DISCORD_TOKEN);

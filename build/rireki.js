@@ -23,7 +23,7 @@ client.on(discord_js_1.Events.MessageReactionAdd, async (reaction, user) => {
             return;
         }
     }
-    console.log(`${reaction.message.author}'s message "${reaction.message.content}" gained a reaction!`);
-    console.log(`${reaction.count} user(s) have given the same reaction to this message!`);
+    console.log(`${reaction.message.author?.tag}'s message "${reaction.message.content}" gained a reaction from ${user.tag}!`);
+    console.log(`Emoji: ${reaction.emoji.name}, Total Count: ${reaction.count}`);
 });
 client.login(process.env.DISCORD_TOKEN);
