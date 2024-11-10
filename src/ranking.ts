@@ -100,3 +100,6 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+//コマンドを打った人にしか見えない
+//完成度低い
