@@ -27,4 +27,4 @@ client.on('messageCreate', (message: Message) => {
 client.login(process.env.DISCORD_TOKEN);
 
 //npx tscしてjs変換してから
-//npm run startして実行
+//npm run startして実行可能
