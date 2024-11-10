@@ -31,13 +31,19 @@ client.on('messageCreate', async (message: Message) => {
         // ボタンを含むアクション行を作成
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
-        // メンションされたユーザーにDMでメッセージとボタンを送信
-        await mentionedUser.send({
-          content: `${mentionedUser.username}さん、メッセージを確認してください!`,
-          components: [row],
-        });
+        // 5分後にメンションされたユーザーにDMでメッセージを送信
+        setTimeout(async () => {
+          try {
+            await mentionedUser.send({
+              content: `${mentionedUser.username}さん、メッセージを確認してください!`,
+              components: [row],
+            });
+          } catch (error) {
+            console.error('Failed to send message to the mentioned user:', error);
+          }
+        }, 1 * 60 * 1000); // 5分 (300,000ミリ秒) 後に実行
       } catch (error) {
-        console.error('Failed to send message to the mentioned user:', error);
+        console.error('Error creating button:', error);
       }
     }
   }

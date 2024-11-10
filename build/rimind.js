@@ -23,13 +23,20 @@ client.on('messageCreate', async (message) => {
                     .setStyle(discord_js_1.ButtonStyle.Primary)
                     .setEmoji('👍');
                 const row = new discord_js_1.ActionRowBuilder().addComponents(button);
-                await mentionedUser.send({
-                    content: `${mentionedUser.username}さん、メッセージを確認してください!`,
-                    components: [row],
-                });
+                setTimeout(async () => {
+                    try {
+                        await mentionedUser.send({
+                            content: `${mentionedUser.username}さん、メッセージを確認してください!`,
+                            components: [row],
+                        });
+                    }
+                    catch (error) {
+                        console.error('Failed to send message to the mentioned user:', error);
+                    }
+                }, 1 * 60 * 1000);
             }
             catch (error) {
-                console.error('Failed to send message to the mentioned user:', error);
+                console.error('Error creating button:', error);
             }
         }
     }
