@@ -9,6 +9,7 @@ client.once('ready', () => {
   console.log(`Logged in as ${client.user?.tag}`);
 });
 
+// メッセージが作成された時に実行される
 client.on('messageCreate', async (message: Message) => {
   // Bot自身のメッセージには反応しない
   if (message.author.bot) return;
@@ -25,19 +26,38 @@ client.on('messageCreate', async (message: Message) => {
           .setCustomId('primary')
           .setLabel('確認しました！')
           .setStyle(ButtonStyle.Primary)
-          .setEmoji('👍'); // ここには絵文字IDを入れてください
+          .setEmoji('👍'); // 絵文字
 
         // ボタンを含むアクション行を作成
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
-        // メンションされたユーザーにリプライとしてメッセージとボタンを送信
-        await message.channel.send({
+        // メンションされたユーザーにDMでメッセージとボタンを送信
+        await mentionedUser.send({
           content: `${mentionedUser.username}さん、メッセージを確認してください!`,
           components: [row],
         });
       } catch (error) {
         console.error('Failed to send message to the mentioned user:', error);
       }
+    }
+  }
+});
+
+// ボタンが押された時に実行される
+client.on('interactionCreate', async (interaction) => {
+  // インタラクションがボタンであるかどうかを確認
+  if (!interaction.isButton()) return;
+
+  // ボタンのカスタムIDを確認
+  if (interaction.customId === 'primary') {
+    // メッセージを削除
+    try {
+      // ボタンが押されたメッセージを削除
+      await interaction.message.delete();
+      // ボタンを押したユーザーに確認メッセージを送信
+      await interaction.reply({ content: 'メッセージを確認しました！', ephemeral: true });
+    } catch (error) {
+      console.error('Failed to delete the message:', error);
     }
   }
 });

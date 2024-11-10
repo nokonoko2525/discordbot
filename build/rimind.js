@@ -23,7 +23,7 @@ client.on('messageCreate', async (message) => {
                     .setStyle(discord_js_1.ButtonStyle.Primary)
                     .setEmoji('👍');
                 const row = new discord_js_1.ActionRowBuilder().addComponents(button);
-                await message.channel.send({
+                await mentionedUser.send({
                     content: `${mentionedUser.username}さん、メッセージを確認してください!`,
                     components: [row],
                 });
@@ -31,6 +31,19 @@ client.on('messageCreate', async (message) => {
             catch (error) {
                 console.error('Failed to send message to the mentioned user:', error);
             }
+        }
+    }
+});
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isButton())
+        return;
+    if (interaction.customId === 'primary') {
+        try {
+            await interaction.message.delete();
+            await interaction.reply({ content: 'メッセージを確認しました！', ephemeral: true });
+        }
+        catch (error) {
+            console.error('Failed to delete the message:', error);
         }
     }
 });
