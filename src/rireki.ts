@@ -1,6 +1,5 @@
-import { Client, GatewayIntentBits ,Partials, Events} from 'discord.js';
+import { Client, GatewayIntentBits, Partials, Events, MessageReaction, PartialMessageReaction, User, PartialUser } from 'discord.js';
 import dotenv from 'dotenv';
-
 
 dotenv.config();
 
@@ -9,28 +8,40 @@ const client = new Client({
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-
 client.once('ready', () => {
-  console.log(`Logged in as ${client.user?.tag}`);
+	console.log(`Logged in as ${client.user?.tag}`);
 });
 
-client.on(Events.MessageReactionAdd, async (reaction, user) => {
-	// When a reaction is received, check if the structure is partial
+// リアクションが追加されたときのイベント
+client.on(Events.MessageReactionAdd, async (reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => {
+	// 部分的なリアクションオブジェクトの場合は完全なデータを取得
 	if (reaction.partial) {
-		// If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
 		try {
 			await reaction.fetch();
 		} catch (error) {
 			console.error('Something went wrong when fetching the message:', error);
-			// Return as `reaction.message.author` may be undefined/null
 			return;
 		}
 	}
 
-	// Now the message has been cached and is fully available
-	console.log(`${reaction.message.author?.tag}'s message "${reaction.message.content}" gained a reaction from ${user.tag}!`);
-	// The reaction is now also fully available and the properties will be reflected accurately:
-	console.log(`Emoji: ${reaction.emoji.name}, Total Count: ${reaction.count}`);
+	console.log(` ${user.tag}がリアクションを追加しました！`);
+	console.log(`Emoji: ${reaction.emoji.name}`);
 });
- 
+
+// リアクションが削除されたときのイベント
+client.on(Events.MessageReactionRemove, async (reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => {
+	// 部分的なリアクションオブジェクトの場合は完全なデータを取得
+	if (reaction.partial) {
+		try {
+			await reaction.fetch();
+		} catch (error) {
+			console.error('Something went wrong when fetching the message:', error);
+			return;
+		}
+	}
+
+	console.log(`${user.tag}がリアクションを削除しました!`);
+	console.log(`Emoji: ${reaction.emoji.name}`);
+});
+
 client.login(process.env.DISCORD_TOKEN);

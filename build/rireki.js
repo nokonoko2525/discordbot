@@ -23,7 +23,20 @@ client.on(discord_js_1.Events.MessageReactionAdd, async (reaction, user) => {
             return;
         }
     }
-    console.log(`${reaction.message.author?.tag}'s message "${reaction.message.content}" gained a reaction from ${user.tag}!`);
-    console.log(`Emoji: ${reaction.emoji.name}, Total Count: ${reaction.count}`);
+    console.log(` ${user.tag}がリアクションを追加しました！`);
+    console.log(`Emoji: ${reaction.emoji.name}`);
+});
+client.on(discord_js_1.Events.MessageReactionRemove, async (reaction, user) => {
+    if (reaction.partial) {
+        try {
+            await reaction.fetch();
+        }
+        catch (error) {
+            console.error('Something went wrong when fetching the message:', error);
+            return;
+        }
+    }
+    console.log(`${user.tag}がリアクションを削除しました!`);
+    console.log(`Emoji: ${reaction.emoji.name}`);
 });
 client.login(process.env.DISCORD_TOKEN);
